@@ -14,7 +14,7 @@
 . ./Funciones.sh
 
 #Maquina donde se alojara la copia
-IP_DAS=8.8.8.8
+IP_DAS=172.22.1.130
 
 
 #1.Verificamos los parametros de entrada para obtener el origen de la copia
@@ -55,13 +55,11 @@ fi
 
 #4.Comprobamos si la ruta esta montada en nuestro equipo 
 
-ComrprobarDestinoCopia $IP_DAS
+RutaParaMoverLaCopia=$(ComrprobarDestinoRemotoCopia '$IP_DAS')
 if [ $? -eq 0 ]; then
     echo "Ok"
-
 else
     echo "No se encuentra ningun destino "
-
 fi
 
 

@@ -157,15 +157,15 @@ function hacer_copia_comprimida() {
 
 #Comprobar si la ruta esta montada
 
-function ComrprobarDestinoCopia {
-
-df -Th 2>/dev/null | grep -e '^$1'
-if [ $? -ne 0 ]; then
-    return 1
-else
-    return 0
-fi
+function ComprobarDestinoRemotoCopia() {
+    destino=$(df -Th 2>/dev/null | grep -e '^'$1'' | awk '{print $7}')
+    if [ -z "$destino" ]; then
+        return 1
+    else
+        return 0
+    fi
 }
+
 
 
 
