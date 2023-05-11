@@ -13,6 +13,8 @@ function f_somosroot {
     fi
 }
 
+
+
 #2. Función para comprobar conexión a internet.
 
 function f_conexion {
@@ -26,11 +28,9 @@ function f_conexion {
 
 function f_conexion_v2 {
          if ping -c 1 $1 > /dev/null; then
-         return 0
-         echo -e "Con"
+            return 0
          else
-         echo -e "Para ejecutar este script es necesario que disponga de conexion con $1"
-         return 1
+            return 1
          fi
  }
 
@@ -78,7 +78,7 @@ function f_actualización_repositorios_rocky {
 
 
 
-#5. Función para ver si los paquetes están el sistema ( lvm2 mdadm dosfstool)
+#5. Función para ver si los paquetes están el sistema 
 
 function f_existepaquete_instala_debian {
         if sudo dpkg -s $1 >/dev/null 2>&1; then
@@ -127,63 +127,45 @@ function f_detectadiscosvacios {
     disco4="${discos[3]}"
 }
 
-#8. Función para partcionar un disco como en la práctica 5.
-function f_particionaundisco {
-   sgdisk -n 0:0:+50M -c 0:efi $disco1
-   sgdisk -n 0:0:+200M -c 0:boot $disco1
-   sgdisk -n 0:0:+1G -c 0:raiz $disco1
-   sgdisk -n 0:0:+700M -c 0:home $disco1
-   sgdisk -n 0:0:+50M -c 0:swap $disco1
-}
 
-function f_particionaundisco_v2 {
-   sgdisk -n 0:0:+50M -c 0:efi $disco1
-   sgdisk -t 0:fd00 -n 0:0:+200M -c 0:boot $disco1
-   sgdisk -t 0:fd00 -n 0:0:+1G -c 0:raiz $disco1
-   sgdisk -t 0:fd00 -n 0:0:+700M -c 0:home $disco1
-   sgdisk -n 0:0:+50M -c 0:swap $disco1
+#Comprueba si existe el directorio personal del usuario que ejecuta el script    
+function ExisteDirectorioPersonalUsuario {
+    if [ -d "$HOME" ]; then
+        echo "El directorio personal del usuario $USER existe en: $HOME."
+        return 0
+    else
+        echo "El directorio personal del usuario no existe."
+        return 1
+    fi
 }
 
 
-#9. Función para copiar la tabla de partciones en los discos 2,3,4.
 
-function f_copiado_tablas_particiones {
-    sgdisk --replicate=$disco2 $disco1
-    sgdisk --replicate=$disco3 $disco1
-    sgdisk --replicate=$disco4 $disco1
-    sgdisk --randomize-guids $disco2
-    sgdisk --randomize-guids $disco3
-    sgdisk --randomize-guids $disco4
-    partprobe
-}
+#Copia 
+function hacer_copia_comprimida() {
+    directorio_origen=$(echo $1)
+    nombre_copia=$(echo $2)
 
-#10. Función para crear un RAID 5 con el 4 disco como spare.
-
-function f_creacion_raid5 {
-   mdadm --create /dev/md0 --level=5 --raid-devices=4 $disco1_2 $disco2_2 $disco3_2 $disco4_2
-   mdadm --create /dev/md1 --level=5 --raid-devices=4 $disco1_3 $disco2_3 $disco3_3 $disco4_3
-   mdadm --create /dev/md2 --level=5 --raid-devices=4 $disco1_4 $disco2_4 $disco3_4 $disco4_4
-   partprobe
+    tar -czvf "$nombre_copia" "$directorio_origen" > /dev/null
+    if [ $? -ne 0 ]; then
+        return 1
+    else
+        return 0
+    fi
 }
 
 
-#11. Función para crear el volumen físico.
-function f_creacion_del_volumen_fisico {
-        pvcreate /dev/md0
-        pvcreate /dev/md1
-        pvcreate /dev/md2
+#Comprobar si la ruta esta montada
+
+function ComrprobarDestinoCopia {
+
+df -Th 2>/dev/null | grep -e '^$1'
+if [ $? -ne 0 ]; then
+    return 1
+else
+    return 0
+fi
 }
 
-#12.
-function f_crecion_grupo_volumenes {
-        vgcreate RM /dev/md0 /dev/md1 /dev/md2
-}
 
-
-#13. Función creamos los discos lógicos.
-function f_creacion_volumen_logico {
-         lvcreate -n VOL1 -L 1G RM
-         lvcreate -n VOL2 -L 1G RM
-         lvcreate -n VOL3 -L 1G RM
-}
 

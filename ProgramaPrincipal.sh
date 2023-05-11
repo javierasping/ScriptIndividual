@@ -10,28 +10,60 @@
 #dará la opción de indicar otro sin salir de la ejecución hasta que se indique uno correcto. 
 #Las copias deben realizarse empacadas.
 
-
-
-
-
 #Enlazar programa funcional con el de funciones
 . ./Funciones.sh
 
+#Maquina donde se alojara la copia
+IP_DAS=8.8.8.8
 
-if [ -d "$HOME" ]; then
-  echo "El directorio personal del usuario existe en: $HOME"
+
+#1.Verificamos los parametros de entrada para obtener el origen de la copia
+if [ $# -eq 0 ]; then
+    directorio_origen_copia=$(pwd)
+    echo "No se ha especificado ruta de origen para la copia de seguridad, se usará el directorio actual --> $directorio_origen_copia"
 else
-  echo "El directorio personal del usuario no existe."
+    directorio_origen_copia=$(echo $1)
+    echo "Has especificado como origen de la copia de seguridad el directorio --> $directorio_origen_copia"
+    while [ ! -d "$directorio_origen_copia" ]; do
+        echo "El directorio $directorio_origen_copia no existe"
+        read -p "Por favor, indica la ruta de un directorio válido: " directorio_origen_copia
+    done
 fi
-
-
-
-
 
 #2.Comprobar si tenemos conexion con el DAS 
-f_conexion_v2 8.8.8.8
-if [ $? -ne 0 ]; then
-    exit 1
+f_conexion_v2 $IP_DAS
+if [ $? -eq 0 ]; then
+    echo -e "Tienes conexion con $IP_DAS"
+else
+    echo -e "Para realizar la copia debes tener conexion con $IP_DAS"
 fi
-echo '2 ok --------------------------------------------------------------'
+
+#Variables para la copia 
+nombre_directorio_origen=$(basename "$directorio_origen_copia")
+fecha_actual="$(date +%d-%m-%Y_%H-%M-%S)"
+nombre_copia="copia_${nombre_directorio_origen}_${fecha_actual}.tar.gz"
+
+#3.Realizamos la copia de seguridad 
+hacer_copia_comprimida "$directorio_origen_copia"  "$nombre_copia"
+if [ $? -eq 0 ]; then
+    echo "Se ha creado una copia comprimida del directorio $directorio_origen_copia , se ha guardado con el nombre "$nombre_copia"."
+
+else
+    echo "Ocurrió un error al hacer la copia"
+
+fi
+
+#4.Comprobamos si la ruta esta montada en nuestro equipo 
+
+ComrprobarDestinoCopia $IP_DAS
+if [ $? -eq 0 ]; then
+    echo "Ok"
+
+else
+    echo "No se encuentra ningun destino "
+
+fi
+
+
+
 
