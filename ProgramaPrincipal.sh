@@ -65,3 +65,7 @@ destino=$(df -Th 2>/dev/null | grep -e '^'$1'' | awk '{print $7}')
 echo $destino
 echo $1
 echo 'Fin'
+
+destino=$(ComprobarDestinoRemotoCopia $IP_DAS)
+ehco $destino
+echo 'FIN'

@@ -160,9 +160,9 @@ function hacer_copia_comprimida() {
 function ComprobarDestinoRemotoCopia() {
     destino=$(df -Th 2>/dev/null | grep -e '^'$1'' | awk '{print $7}')
     if [ -z "$destino" ]; then
-        return 1
-    else
         return 0
+    else
+        return 1
     fi
 }
 
