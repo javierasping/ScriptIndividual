@@ -167,5 +167,16 @@ function hacer_copia_comprimida() {
 # }
 
 
+#
+function MoverDestinoRemotoMontado {
+    mv  "$1" "$2"
+    if [ $? -ne 0 ]; then
+        return 1
+    else
+        return 0
+    fi
+}
+
+
 
 

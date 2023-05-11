@@ -60,7 +60,12 @@ if [ -z "$destino" ]; then
     echo "No se ha encontrado un destino con la '$IP_DAS'"
 else
     echo "Se copiara $nombre_copia a $destino"
-    mv -i $nombre_copia $destino
+    MoverDestinoRemotoMontado "$nombre_copia" "$destino"
+    if [ $? -eq 0 ]; then
+        echo -e "Se ha realizado la copia correctamente .Se encuentra en el directorio $destino con el nombre $nombre_copia"
+    else
+        echo -e "Ha habido un error al mover la copia a $destino"
+    fi
 fi
 
 echo $destino
