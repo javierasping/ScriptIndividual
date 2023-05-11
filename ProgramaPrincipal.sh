@@ -30,6 +30,7 @@ else
     done
 fi
 
+echo "1 OK ----------------------------------------------------------------------------------------------------"
 #2.Comprobar si tenemos conexion con el DAS 
 f_conexion_v2 $IP_DAS
 if [ $? -eq 0 ]; then
@@ -37,6 +38,7 @@ if [ $? -eq 0 ]; then
 else
     echo -e "Para realizar la copia debes tener conexion con $IP_DAS"
 fi
+echo "2 OK ----------------------------------------------------------------------------------------------------"
 
 #Variables para la copia 
 nombre_directorio_origen=$(basename "$directorio_origen_copia")
@@ -52,8 +54,10 @@ else
     echo "Ocurrió un error al hacer la copia"
 
 fi
+echo "3 OK ----------------------------------------------------------------------------------------------------"
 
-#4.Comprobamos si la ruta esta montada en nuestro equipo 
+
+#4.Comprobamos si la ruta esta montada en nuestro equipo . Si esta esta se movera la copia por el contrario devolvera un error .
 
 destino=$(df -Th 2>/dev/null | grep -e '^'$IP_DAS'' | awk '{print $7}')
 if [ -z "$destino" ]; then
@@ -67,6 +71,8 @@ else
         echo -e "Ha habido un error al mover la copia a $destino"
     fi
 fi
+
+echo "4 OK ----------------------------------------------------------------------------------------------------"
 
 echo $destino
 
