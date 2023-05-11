@@ -57,11 +57,11 @@ fi
 
 destino=$(df -Th 2>/dev/null | grep -e '^'$1'' | awk '{print $7}')
     if [ -z "$destino" ]; then
-        echo "Mal"
+        echo "Bien"
     else
-        echo 'OK'
+        echo 'Malardo'
     fi
 
 echo $destino
-
+echo $1
 echo 'Fin'
