@@ -57,9 +57,9 @@ fi
 
 destino=$(df -Th 2>/dev/null | grep -e '^'$1'' | awk '{print $7}')
     if [ -z "$destino" ]; then
-        return 1
+        echo "Mal"
     else
-        return 0
+        echo 'OK'
     fi
 
 echo $destino
