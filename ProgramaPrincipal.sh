@@ -55,15 +55,13 @@ fi
 
 #4.Comprobamos si la ruta esta montada en nuestro equipo 
 
-RutaParaMoverLaCopia=$(ComprobarDestinoRemotoCopia '$IP_DAS')
-if [ $? -eq 0 ]; then
-    echo "Ok"
-else
-    echo "No se encuentra ningun destino "
-fi
+destino=$(df -Th 2>/dev/null | grep -e '^'$1'' | awk '{print $7}')
+    if [ -z "$destino" ]; then
+        return 1
+    else
+        return 0
+    fi
 
-
-
-echo '$RutaParaMoverLaCopia'
+echo $destino
 
 echo 'Fin'
