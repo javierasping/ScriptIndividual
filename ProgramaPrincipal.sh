@@ -55,7 +55,7 @@ fi
 
 #4.Comprobamos si la ruta esta montada en nuestro equipo 
 
-RutaParaMoverLaCopia=$(ComrprobarDestinoRemotoCopia '$IP_DAS')
+RutaParaMoverLaCopia=$(ComprobarDestinoRemotoCopia '$IP_DAS')
 if [ $? -eq 0 ]; then
     echo "Ok"
 else
@@ -64,4 +64,6 @@ fi
 
 
 
+echo '$RutaParaMoverLaCopia'
 
+echo 'Fin'
