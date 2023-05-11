@@ -55,20 +55,14 @@ fi
 
 #4.Comprobamos si la ruta esta montada en nuestro equipo 
 
-destino=$(echo $(df -Th 2>/dev/null | grep -e '^'$IP_DAS'' | awk '{print $7}'))
-    if [ -z "$destino" ]; then
-        echo "Se copiara $nombre_copia a $destino"
-        mv $nombre_copia $destino
-            if [ $? -eq 0 ]; then
-                echo "Se ha copiado correctamente $nombre_copia a $destino ."
+destino=$(df -Th 2>/dev/null | grep -e '^'$IP_DAS'' | awk '{print $7}')
+if [ -z "$destino" ]; then
+    echo "No se ha encontrado un destino con la '$IP_DAS'"
+else
+    echo "Se copiara $nombre_copia a $destino"
+    mv -i $nombre_copia $destino
+fi
 
-            else
-                echo "Ocurrió un error al hacer la copia"
+echo $destino
 
-            fi
-    else
-        echo 'No se ha encontrado un destino con la '$IP_DAS''
-    fi
-
-echo $destino 
 
