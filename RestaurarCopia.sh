@@ -39,10 +39,15 @@ echo "2 OK ---------------------------------------------------------------------
 
 #3 Comprobar que esta montada una unidad de red con la ip del NAS
 
-Disco= df -Th 2>/dev/null | grep -e '^'$1'' | awk '{print $7}'
-echo $Disco
+Ruta_Recurso_Compartido=$(df -Th 2>/dev/null | grep -e '^'$IP_DAS'' | awk '{print $7}')
 if [ $? -eq 0 ]; then
-    echo -e "ok"
+    echo -e "La ruta es $Ruta_Recurso_Compartido"
+    if [ -e "$Ruta_Recurso_Compartido/$nombre_copia" ]; then
+        echo "El archivo $archivo existe en la ruta $ruta."
+    else
+        echo "El archivo $archivo no existe en la ruta $ruta."
+    fi
 else
-    echo -e "NO"
+    echo -e "Fffffffffffffff"
 fi
+
