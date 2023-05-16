@@ -43,9 +43,9 @@ Ruta_Recurso_Compartido=$(df -Th 2>/dev/null | grep -e '^'$IP_DAS'' | awk '{prin
 if [ $? -eq 0 ]; then
     echo -e "La ruta es $Ruta_Recurso_Compartido"
     if [ -e "$Ruta_Recurso_Compartido/$nombre_copia" ]; then
-        echo "El archivo $archivo existe en la ruta $ruta."
+        echo "El archivo $nombre_copia existe en la ruta $Ruta_Recurso_Compartido."
     else
-        echo "El archivo $archivo no existe en la ruta $ruta."
+        echo "El archivo $nombre_copia no existe en la ruta $Ruta_Recurso_Compartido."
     fi
 else
     echo -e "Fffffffffffffff"
