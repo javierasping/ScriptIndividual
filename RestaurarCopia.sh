@@ -65,16 +65,19 @@ fi
 #5 Restaurar copia de seguridad 
 cp "$Ruta_Recurso_Compartido/$nombre_copia" "$ruta_destino"
 if [ $? -eq 0 ]; then
-    tar -xzf "$Ruta_Recurso_Compartido/$nombre_copia" -C "$ruta_destino"
+    tar -xzf "$ruta_destino/$nombre_copia" -C "$ruta_destino"
     if [ $? -eq 0 ]; then
         echo "Copia de seguridad restaurada exitosamente en $ruta_destino."
     else
-        echo "Error al restaurar $nombre_copia en $ruta_destino"
+        echo "Error al restaurar $nombre_copia en $ruta_destino."
         exit 1
     fi
 else
     echo "Error al copiar $nombre_copia a $ruta_destino."
     exit 1
 fi
+
+
+
 
 
