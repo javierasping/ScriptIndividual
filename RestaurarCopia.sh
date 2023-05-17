@@ -56,6 +56,7 @@ fi
 #4 Comprobar ruta de destino
 
 if [ -d "$ruta_destino" ]; then
+    echo "El directorio $ruta_destino  existe."
 else
     echo "El directorio $ruta_destino no existe."
     exit 1 
@@ -76,6 +77,7 @@ else
     echo "Error al copiar $nombre_copia a $ruta_destino."
     exit 1
 fi
+
 
 
 
