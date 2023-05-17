@@ -41,13 +41,40 @@ echo "2 OK ---------------------------------------------------------------------
 
 Ruta_Recurso_Compartido=$(df -Th 2>/dev/null | grep -e '^'$IP_DAS'' | awk '{print $7}')
 if [ $? -eq 0 ]; then
-    echo -e "La ruta es $Ruta_Recurso_Compartido"
     if [ -e "$Ruta_Recurso_Compartido/$nombre_copia" ]; then
         echo "El archivo $nombre_copia existe en la ruta $Ruta_Recurso_Compartido."
     else
         echo "El archivo $nombre_copia no existe en la ruta $Ruta_Recurso_Compartido."
+        exit 1
     fi
 else
-    echo -e "Fffffffffffffff"
+    echo -e "No se ha encontrafo ningun recurso compartido montado en el equipo"
+    exit 1
 fi
+
+
+#4 Comprobar ruta de destino
+
+if [ -d "$ruta_destino" ]; then
+else
+    echo "El directorio $ruta_destino no existe."
+    exit 1 
+fi
+
+
+#5 Restaurar copia de seguridad 
+cp "$Ruta_Recurso_Compartido/$nombre_copia" "$ruta_destino"
+if [ $? -eq 0 ]; then
+    tar -xzf "$Ruta_Recurso_Compartido/$nombre_copia" -C "$ruta_destino"
+    if [ $? -eq 0 ]; then
+        echo "Copia de seguridad restaurada exitosamente en $ruta_destino."
+    else
+        echo "Error al restaurar $nombre_copia en $ruta_destino"
+        exit 1
+    fi
+else
+    echo "Error al copiar $nombre_copia a $ruta_destino."
+    exit 1
+fi
+
 
