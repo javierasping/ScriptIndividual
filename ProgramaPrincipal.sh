@@ -45,7 +45,30 @@ nombre_directorio_origen=$(basename "$directorio_origen_copia")
 fecha_actual="$(date +%d-%m-%Y_%H-%M-%S)"
 nombre_copia="copia_${nombre_directorio_origen}_${fecha_actual}.tar.gz"
 
-#3.Realizamos la copia de seguridad 
+#3. Función para comprobar que sistema operativo estamos utilizando.
+
+f_sistema_operativo_V2
+if [ $? -eq 2 ]; then
+    f_actualización_repositorios_debian
+    if [ $? -eq 0 ]; then
+        for i in tar ; do
+            f_existepaquete_instala_debian $i
+        done
+    fi
+fi
+if [ $? -eq 3 ]; then
+    f_actualización_repositorios_rocky
+    if [ $? -eq 0 ]; then
+        for i in tar ; do
+            f_existepaquete_instala_rocky $i
+        done
+    fi
+fi
+echo '3 ok --------------------------------------------------------------'
+
+
+
+#4.Realizamos la copia de seguridad 
 hacer_copia_comprimida "$directorio_origen_copia"  "$nombre_copia"
 if [ $? -eq 0 ]; then
     echo "Se ha creado una copia comprimida del directorio $directorio_origen_copia , se ha guardado con el nombre "$nombre_copia"."
@@ -54,10 +77,10 @@ else
     echo "Ocurrió un error al hacer la copia"
 
 fi
-echo "3 OK ----------------------------------------------------------------------------------------------------"
+echo "4 OK ----------------------------------------------------------------------------------------------------"
 
 
-#4.Comprobamos si la ruta esta montada en nuestro equipo . Si esta esta se movera la copia por el contrario devolvera un error .
+#5.Comprobamos si la ruta esta montada en nuestro equipo . Si esta esta se movera la copia por el contrario devolvera un error .
 
 destino=$(df -Th 2>/dev/null | grep -e '^'$IP_DAS'' | awk '{print $7}')
 if [ -z "$destino" ]; then
@@ -72,7 +95,7 @@ else
     fi
 fi
 
-echo "4 OK ----------------------------------------------------------------------------------------------------"
+echo "5 OK ----------------------------------------------------------------------------------------------------"
 
 echo $destino
 
