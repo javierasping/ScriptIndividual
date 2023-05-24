@@ -1,14 +1,9 @@
 #!/bin/bash
 #RestaurarCopias
 
-#P21 
-#Implementa un programa para realizar copias de seguridad que se guardarán en un das.
-# Se deberá comprobar que hay conexión con el das en el que se realizará dicha copia.
-# Si se ejecuta sin ningún parámetro, de hará una copia completa del directorio de usuario que 
-#lo está ejecutando, en caso contrario se comprobará si la ruta
-# existe y se realizará la copia de dicho directorio. Si el directorio no existe, 
-#dará la opción de indicar otro sin salir de la ejecución hasta que se indique uno correcto. 
-#Las copias deben realizarse empacadas.
+# Autor : Francisco Javier Cruces Doval
+# Descripcion: Este script restaurara la copia de seguridad que indiques y la pondra a continuacion en el directorio que eligas . ./RestaurarCopia <nombre_copia> <ruta_destino>
+# Repositorio: https://github.com/javierasping/ScriptIndividual
 
 #Enlazar programa funcional con el de funciones
 . ./Funciones.sh
