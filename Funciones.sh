@@ -124,7 +124,7 @@ function hacer_copia_comprimida() {
     directorio_origen=$(echo $1)
     nombre_copia=$(echo $2)
 
-    time tar -czvf "$nombre_copia" "$directorio_origen" > /dev/null | grep 'real' | awk {'print $2'}
+    time tar -czvf "$nombre_copia" "$directorio_origen" > /dev/null 
     if [ $? -ne 0 ]; then
         return 1
     else
