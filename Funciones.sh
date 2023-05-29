@@ -104,28 +104,6 @@ function f_existepaquete_instala_rocky {
 }
 
 
-#7. Función para comprobar el numero de dispositivos libres hay(min 4) , si no da error .
-function f_detectadiscosvacios {
-    local discos=()
-    for i in {b..z}; do
-        if sfdisk -d /dev/vd$i 2>&1 | grep -q "does not contain a recognized partition table"; then
-            discos+=("/dev/vd$i")
-        fi
-        if [[ ${#discos[@]} -eq 4 ]]; then
-            break
-        fi
-    done
-
-    if [[ ${#discos[@]} -ne 4 ]]; then
-        echo "Error: no se detectaron 4 discos vacíos" >&2
-        return 1
-    fi
-
-    disco1="${discos[0]}"
-    disco2="${discos[1]}"
-    disco3="${discos[2]}"
-    disco4="${discos[3]}"
-}
 
 
 #Comprueba si existe el directorio personal del usuario que ejecuta el script    
@@ -146,7 +124,7 @@ function hacer_copia_comprimida() {
     directorio_origen=$(echo $1)
     nombre_copia=$(echo $2)
 
-    tar -czvf "$nombre_copia" "$directorio_origen" > /dev/null
+    time tar -czvf "$nombre_copia" "$directorio_origen" > /dev/null | grep 'real' | awk {'print $2'}
     if [ $? -ne 0 ]; then
         return 1
     else
